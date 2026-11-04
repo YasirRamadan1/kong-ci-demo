@@ -1,0 +1,10 @@
+_format_version: "3.0"
+
+services:
+  - name: echo
+    url: http://httpbin:8080
+    routes:
+      - name: echo-route
+        paths:
+          - /echo
+        strip_path: true
