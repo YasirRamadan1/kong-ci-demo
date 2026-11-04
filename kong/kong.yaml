@@ -7,4 +7,4 @@ services:
       - name: echo-route
         paths:
           - /echo
-        strip_path: false
+        strip_path: true
