@@ -28,10 +28,8 @@ jobs:
           echo "Kong did not start"
           exit 1
 
-      - name: Echo route returns 200 and strips the path
-        run: |
-          curl -fsS localhost:8000/echo/get | tee response.json
-          grep -q '"url": "http://httpbin:8080/get"' response.json
+      - name: Behavioural tests
+        run: ./tests/test.sh
 
       - name: Show Kong logs if something failed
         if: failure()
