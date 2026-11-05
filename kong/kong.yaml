@@ -8,3 +8,19 @@ services:
         paths:
           - /echo
         strip_path: true
+
+      - name: private-route
+        paths:
+          - /private
+        strip_path: true
+        plugins:
+          - name: key-auth
+            config:
+              key_names:
+                - apikey
+              hide_credentials: true
+
+consumers:
+  - username: demo-app
+    keyauth_credentials:
+      - key: demo-secret-key
