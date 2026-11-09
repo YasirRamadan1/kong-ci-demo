@@ -7,7 +7,7 @@ services:
       KONG_PROXY_LISTEN: 0.0.0.0:8000
       KONG_ADMIN_LISTEN: 0.0.0.0:8001
     volumes:
-      - ./kong:/kong:ro
+      - ./build:/kong:ro
     depends_on:
       - httpbin
     ports:
