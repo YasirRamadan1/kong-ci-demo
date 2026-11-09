@@ -1,0 +1,12 @@
+services:
+  - name: orders
+    url: http://httpbin:8080/anything
+    routes:
+      - name: orders-catalog
+        paths: [/orders/catalog]
+        methods: [ GET ]
+        tags: [access:public]
+
+      - name: orders-api
+        paths: [/orders]
+        methods: [GET, POST]
