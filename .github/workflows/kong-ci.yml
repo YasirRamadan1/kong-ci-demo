@@ -6,22 +6,40 @@ on:
   pull_request:
 
 jobs:
-  validate:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Guard team files and build config
+        run: python3 scripts/build.py build/kong.yaml
+
       - uses: kong/setup-deck@v1
         with:
           deck-version: '1.43.1'
           wrapper: false
-      - name: Validate Kong config (offline)
-        run: deck file validate kong/kong.yaml
+
+      - name: Validate built config (offline)
+        run: deck file validate build/kong.yaml
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kong-config
+          path: build/kong.yaml
 
   test:
-    needs: validate
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: kong-config
+          path: build
 
       - name: Start Kong and httpbin
         run: docker compose up -d
