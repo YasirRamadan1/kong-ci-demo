@@ -1,0 +1,6 @@
+# Owned by the platform team. Demo key only - never put real keys in git.
+# Who can call
+consumers:
+  - username: demo-app
+    keyauth_credentials:
+      - key: demo-secret-key

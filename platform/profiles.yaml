@@ -1,0 +1,10 @@
+# Owned by the platform team.
+# Every route gets exactly one profile. No access tag = private.
+profiles:
+  private:
+    - name: key-auth
+      config:
+        key_names:
+          - apikey
+        hide_credentials: true
+  public: []
