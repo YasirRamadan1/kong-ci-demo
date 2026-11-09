@@ -4,6 +4,7 @@ services:
     routes:
       - name: orders-catalog
         paths: [/orders/catalog]
+        methods: [ GET ]
         tags: [access:public]
 
       - name: orders-api
