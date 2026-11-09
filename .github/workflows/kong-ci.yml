@@ -55,7 +55,7 @@ jobs:
           echo "Kong did not start"; exit 1
 
       - name: Behavioural tests
-        run: ./tests/test.sh
+        run: ./tests/run.sh
 
       - name: Show Kong logs if something failed
         if: failure()
