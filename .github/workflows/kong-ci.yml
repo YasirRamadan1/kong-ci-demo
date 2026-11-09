@@ -6,12 +6,22 @@ on:
   pull_request:
 
 jobs:
-  test:
+  validate:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: kong/setup-deck@v1
+        with:
+          deck-version: '1.43.1'
+          wrapper: false
+      - name: Validate Kong config (offline)
+        run: deck file validate kong/kong.yaml
+
+  test:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
       - name: Start Kong and httpbin
         run: docker compose up -d
@@ -20,13 +30,11 @@ jobs:
         run: |
           for i in $(seq 1 30); do
             if curl -fs localhost:8001/status > /dev/null; then
-              echo "Kong is up"
-              exit 0
+              echo "Kong is up"; exit 0
             fi
             sleep 1
           done
-          echo "Kong did not start"
-          exit 1
+          echo "Kong did not start"; exit 1
 
       - name: Behavioural tests
         run: ./tests/test.sh
