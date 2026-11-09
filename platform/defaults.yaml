@@ -1,0 +1,13 @@
+# Owned by the platform team.
+# Applied to every service and route built from team files.
+service:
+  connect_timeout: 5000
+  read_timeout: 30000
+  write_timeout: 30000
+  retries: 2
+
+route:
+  strip_path: true
+  protocols:
+    - http
+    - https

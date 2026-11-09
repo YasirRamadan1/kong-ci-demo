@@ -32,4 +32,11 @@ check "backend knows the consumer" "demo-app" \
 check "key is not forwarded"       "false" \
       "$(jq -r '.headers | has("Apikey")' <<<"$body")"
 
+# --- platform defaults are applied ---
+ADMIN="${ADMIN:-http://localhost:8001}"
+check "service gets platform timeout" 30000 \
+            "$(curl -s "$ADMIN/services/echo" | jq -r .read_timeout)"
+check "service is owned by its team"  "team:demo" \
+            "$(curl -s "$ADMIN/services/echo" | jq -r '.tags[0]')"
+
 exit $fail
