@@ -1,0 +1,43 @@
+openapi: 3.0.3
+info:
+  title: Cards API
+  version: 1.0.0
+
+servers:
+  - url: http://httpbin:8080/anything
+
+# Every operation needs an API key unless it says otherwise.
+security:
+  - apiKey: []
+
+paths:
+  /cards/products:
+    get:
+      operationId: listCardProducts
+      summary: Card products on offer
+      security: []
+      responses:
+        "200": { description: OK }
+
+  /cards:
+    get:
+      operationId: listCards
+      summary: The caller's cards
+      responses:
+        "200": { description: OK }
+
+  /cards/{cardId}:
+    get:
+      operationId: getCard
+      summary: One card
+      parameters:
+        - { name: cardId, in: path, required: true, schema: { type: string } }
+      responses:
+        "200": { description: OK }
+
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: apikey
