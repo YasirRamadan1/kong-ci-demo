@@ -1,6 +1,13 @@
-# Owned by the platform team. Demo key only - never put real keys in git.
-# Who can call
+# Used only by tests/platform/plugins.sh, so its requests
+# don't use up demo-app's quota during the other tests.
+
 consumers:
-  - username: demo-app
-    keyauth_credentials:
-      - key: demo-secret-key
+    - username: demo-app
+      keyauth_credentials:
+        - key: demo-secret-key
+
+    # Used only by tests/platform/plugins.sh, so its requests
+    # don't use up demo-app's quota during the other tests.
+    - username: rate-limit-probe
+      keyauth_credentials:
+        - key: rate-limit-probe-key

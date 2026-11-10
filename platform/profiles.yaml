@@ -7,4 +7,9 @@ profiles:
         key_names:
           - apikey
         hide_credentials: true
+    - name: rate-limiting
+      config:
+        minute: 60
+        limit_by: consumer
+        policy: local
   public: []
