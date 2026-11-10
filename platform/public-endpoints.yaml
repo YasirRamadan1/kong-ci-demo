@@ -1,0 +1,11 @@
+# Owned by the security / platform team.
+# A route may be public ONLY if it is listed here. Teams declare public
+# (access:public tag, or security: [] in OpenAPI); this file approves it.
+# Declared public but not listed -> the build fails.
+public:
+  demo:
+    - echo-route
+  orders:
+    - orders-catalog
+  cards:
+    - listCardProducts
