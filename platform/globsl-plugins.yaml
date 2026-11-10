@@ -1,0 +1,8 @@
+# Owned by the platform team.
+# Applied to every request on every route, public and private.
+plugins:
+  - name: correlation-id
+    config:
+      header_name: X-Request-ID
+      generator: uuid
+      echo_downstream: true
