@@ -28,7 +28,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: kong-config
-          path: build/kong.yaml
+          path: build
 
   test:
     needs: build

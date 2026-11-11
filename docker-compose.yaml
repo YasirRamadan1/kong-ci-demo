@@ -10,9 +10,19 @@ services:
       - ./build:/kong:ro
     depends_on:
       - httpbin
+      - cards-mock
     ports:
       - "8000:8000"
       - "8001:8001"
 
   httpbin:
     image: mccutchen/go-httpbin:v2.15.0
+
+  # Mock backend for the cards team, generated from its OpenAPI spec.
+  # build.py writes the spec (without security) to build/mocks/.
+  cards-mock:
+    image: stoplight/prism:5
+    platform: linux/amd64
+    command: mock -h 0.0.0.0 --multiprocess false /mocks/cards.openapi.yaml
+    volumes:
+      - ./build/mocks:/mocks:ro

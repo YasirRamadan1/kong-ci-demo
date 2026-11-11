@@ -12,6 +12,9 @@ Everything else comes from the platform:
   platform/consumers.yaml        - who may call private routes
   platform/public-endpoints.yaml - which routes are approved to be public
 
+For every OpenAPI spec, a copy without security is written to build/mocks/,
+for a mock backend (Prism) to serve example responses from.
+
 Routes are private by default. Public needs two keys: the team declares it
 (tag 'access:public', or 'security: []' in OpenAPI) AND the platform approves
 it in platform/public-endpoints.yaml.
@@ -185,6 +188,23 @@ def guard_openapi(path, spec):
             fail(path, f"{method.upper()} {p}: operationId is required")
 
 
+def write_mock_spec(path, spec, out_dir):
+    """Write a copy of the spec for the mock backend, without security.
+
+    Authentication is the gateway's job: Kong checks the key and removes it
+    before forwarding (hide_credentials). A mock that enforced the spec's
+    security itself would reject every private request with 401.
+    """
+    mock = copy.deepcopy(spec)
+    mock.pop("security", None)
+    for _, _, op in operations(mock):
+        op.pop("security", None)
+    os.makedirs(out_dir, exist_ok=True)
+    with open(os.path.join(out_dir, os.path.basename(path)), "w") as f:
+        f.write(f"# GENERATED from {path} by scripts/build.py - do not edit\n")
+        yaml.safe_dump(mock, f, sort_keys=False)
+
+
 def from_openapi(path, spec):
     """Generate services with decK; profile per operation from 'security'."""
     default_security = spec.get("security")
@@ -273,6 +293,7 @@ def main(out_path):
             if len(errors) > before:
                 continue  # don't generate from a spec that failed its guard
             team_services = from_openapi(path, doc)
+            write_mock_spec(path, doc, os.path.join(os.path.dirname(out_path) or ".", "mocks"))
         else:
             guard_simple(path, doc)
             team_services = from_simple(doc)
