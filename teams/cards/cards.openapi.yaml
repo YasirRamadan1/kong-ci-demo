@@ -4,7 +4,7 @@ info:
   version: 1.0.0
 
 servers:
-  - url: http://httpbin:8080/anything
+  - url: http://cards-mock:4010      # no backend yet: the mock serves the examples
 
 # Every operation needs an API key unless it says otherwise.
 security:
@@ -17,14 +17,25 @@ paths:
       summary: Card products on offer
       security: []
       responses:
-        "200": { description: OK }
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                - { id: gold, name: Gold Card }
+                - { id: student, name: Student Card }
 
   /cards:
     get:
       operationId: listCards
       summary: The caller's cards
       responses:
-        "200": { description: OK }
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                - { id: "123", product: gold, status: active, last4: "4417" }
 
   /cards/{cardId}:
     get:
@@ -33,7 +44,16 @@ paths:
       parameters:
         - { name: cardId, in: path, required: true, schema: { type: string } }
       responses:
-        "200": { description: OK }
+        "200":
+          description: OK
+          content:
+            application/json:
+              example: { id: "123", product: gold, status: active, last4: "4417" }
+        "404":
+          description: Card not found
+          content:
+            application/json:
+              example: { error: card_not_found }
 
 components:
   securitySchemes:
